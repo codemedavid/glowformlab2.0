@@ -16,6 +16,7 @@ export interface Product {
   cas_number: string | null;
   sequence: string | null;
   storage_conditions: string;
+  inclusions: string[] | null;
   
   // Stock and availability
   stock_quantity: number;

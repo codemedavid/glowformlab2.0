@@ -98,9 +98,6 @@ ${cartItems.map(item => {
   }
   line += ` x${item.quantity} - ₱${(item.price * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}`;
   line += `\n  Purity: ${item.product.purity_percentage}%`;
-  if (item.product.cas_number) {
-    line += ` | CAS: ${item.product.cas_number}`;
-  }
   return line;
 }).join('\n\n')}
 
@@ -116,13 +113,13 @@ ${paymentMethod ? `Account: ${paymentMethod.account_number}` : ''}
 Please confirm this order. Thank you!
     `.trim();
 
-    // Send order to WhatsApp
-    const whatsappNumber = '639058429200';
+    // Send order to Facebook Messenger
+    const facebookPageId = '61573812453289';
     const encodedMessage = encodeURIComponent(orderDetails);
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    const messengerUrl = `https://m.me/${facebookPageId}?text=${encodedMessage}`;
     
-    // Open WhatsApp
-    window.open(whatsappUrl, '_blank');
+    // Open Facebook Messenger
+    window.open(messengerUrl, '_blank');
     
     // Show confirmation
     setStep('confirmation');
@@ -141,12 +138,12 @@ Please confirm this order. Thank you!
               <Sparkles className="w-7 h-7 text-yellow-500" />
             </h1>
             <p className="text-gray-600 mb-8 text-base md:text-lg leading-relaxed">
-              Your order has been sent to our WhatsApp. 
+              Your order has been sent to our Facebook Messenger. 
               <Heart className="inline w-5 h-5 text-pink-500 mx-1" />
               We will confirm your order and send you the payment details shortly!
             </p>
             
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-8 text-left border-2 border-blue-100">
+            <div className="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-2xl p-6 mb-8 text-left border-2 border-teal-100">
               <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
                 What happens next? 
                 <Sparkles className="w-5 h-5 text-yellow-500" />
@@ -154,7 +151,7 @@ Please confirm this order. Thank you!
               <ul className="space-y-3 text-sm md:text-base text-gray-700">
                 <li className="flex items-start gap-3">
                   <span className="text-2xl">1️⃣</span>
-                  <span>We'll confirm your order on WhatsApp within 24 hours</span>
+                  <span>We'll confirm your order on Facebook Messenger within 24 hours</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <span className="text-2xl">2️⃣</span>
@@ -208,7 +205,7 @@ Please confirm this order. Thank you!
             {/* Main Form */}
             <div className="lg:col-span-2 space-y-4 md:space-y-6">
               {/* Customer Information */}
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-5 md:p-6 border-2 border-blue-100">
+              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg p-5 md:p-6 border-2 border-teal-100">
                 <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6 flex items-center gap-2">
                   <div className="bg-gradient-to-br from-blue-400 to-purple-500 p-2 rounded-xl">
                     <Package className="w-5 h-5 md:w-6 md:h-6 text-white" />
@@ -365,7 +362,7 @@ Please confirm this order. Thank you!
                         <div className="flex-1">
                           <h4 className="font-semibold text-gray-900 text-sm">{item.product.name}</h4>
                           {item.variation && (
-                            <p className="text-xs text-blue-600 mt-1">{item.variation.name}</p>
+                            <p className="text-xs text-teal-600 mt-1">{item.variation.name}</p>
                           )}
                           <p className="text-xs text-gray-500 mt-1">
                             {item.product.purity_percentage}% Purity
@@ -387,12 +384,12 @@ Please confirm this order. Thank you!
                   </div>
                   <div className="flex justify-between text-gray-600 text-xs">
                     <span>Shipping</span>
-                    <span className="font-medium text-blue-600">To be discussed via chat</span>
+                    <span className="font-medium text-teal-600">To be discussed via chat</span>
                   </div>
                   <div className="border-t-2 border-gray-200 pt-3">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-gray-900">Total</span>
-                      <span className="text-2xl font-bold text-blue-600">
+                      <span className="text-2xl font-bold text-teal-600">
                         ₱{finalTotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}
                       </span>
                     </div>
@@ -438,7 +435,7 @@ Please confirm this order. Thank you!
 
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 flex items-center gap-2">
           Payment
-          <CreditCard className="w-6 h-6 md:w-7 md:h-7 text-blue-600" />
+          <CreditCard className="w-6 h-6 md:w-7 md:h-7 text-teal-600" />
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
@@ -465,8 +462,8 @@ Please confirm this order. Thank you!
                     }`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <CreditCard className="w-6 h-6 text-blue-600" />
+                      <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center">
+                        <CreditCard className="w-6 h-6 text-teal-600" />
                       </div>
                       <div className="text-left">
                         <p className="font-semibold text-gray-900">{method.name}</p>
@@ -488,7 +485,7 @@ Please confirm this order. Thank you!
                   <div className="space-y-2 text-sm text-gray-700 mb-4">
                     <p><strong>Account Number:</strong> {paymentMethodInfo.account_number}</p>
                     <p><strong>Account Name:</strong> {paymentMethodInfo.account_name}</p>
-                    <p><strong>Amount to Pay:</strong> <span className="text-xl font-bold text-blue-600">₱{finalTotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}</span></p>
+                    <p><strong>Amount to Pay:</strong> <span className="text-xl font-bold text-teal-600">₱{finalTotal.toLocaleString('en-PH', { minimumFractionDigits: 0 })}</span></p>
                   </div>
                   
                   {paymentMethodInfo.qr_code_url && (
@@ -527,13 +524,13 @@ Please confirm this order. Thank you!
               className="w-full bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:from-green-500 hover:via-green-600 hover:to-green-700 text-white py-3 md:py-4 rounded-2xl font-bold text-base md:text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all flex items-center justify-center gap-2"
             >
               <ShieldCheck className="w-5 h-5 md:w-6 md:h-6" />
-              Send Order to WhatsApp
+              Send Order via Messenger
             </button>
           </div>
 
           {/* Order Summary Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-5 md:p-6 sticky top-24 border-2 border-blue-100">
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-5 md:p-6 sticky top-24 border-2 border-teal-100">
               <h2 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-6 flex items-center gap-2">
                 Final Summary
                 <Sparkles className="w-5 h-5 text-yellow-500" />

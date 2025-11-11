@@ -57,6 +57,7 @@ export type Database = {
           cas_number: string | null;
           sequence: string | null;
           storage_conditions: string;
+          inclusions: string[] | null;
           stock_quantity: number;
           available: boolean;
           featured: boolean;
@@ -80,6 +81,7 @@ export type Database = {
           cas_number?: string | null;
           sequence?: string | null;
           storage_conditions?: string;
+          inclusions?: string[] | null;
           stock_quantity?: number;
           available?: boolean;
           featured?: boolean;
@@ -103,6 +105,7 @@ export type Database = {
           cas_number?: string | null;
           sequence?: string | null;
           storage_conditions?: string;
+          inclusions?: string[] | null;
           stock_quantity?: number;
           available?: boolean;
           featured?: boolean;

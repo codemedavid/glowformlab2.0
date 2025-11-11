@@ -18,9 +18,9 @@ const iconMap: { [key: string]: React.ReactElement } = {
 
 // Cute gradient colors for each category
 const categoryColors: { [key: string]: string } = {
-  all: 'from-blue-400 to-blue-600',
-  research: 'from-purple-400 to-purple-600',
-  cosmetic: 'from-pink-400 to-pink-600',
+  all: 'from-teal-400 to-teal-600',
+  research: 'from-emerald-400 to-emerald-600',
+  cosmetic: 'from-green-400 to-green-600',
   performance: 'from-orange-400 to-orange-600',
   healing: 'from-red-400 to-red-600',
   cognitive: 'from-cyan-400 to-cyan-600',

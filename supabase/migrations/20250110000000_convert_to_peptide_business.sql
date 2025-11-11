@@ -87,11 +87,11 @@ CREATE TABLE site_settings (
 -- Insert default categories for peptides
 INSERT INTO categories (id, name, icon, sort_order, active) VALUES
 ('all', 'All Products', 'Grid', 0, true),
-('research', 'Research Peptides', 'FlaskConical', 1, true),
-('cosmetic', 'Cosmetic Peptides', 'Sparkles', 2, true),
-('performance', 'Performance', 'Dumbbell', 3, true),
-('healing', 'Healing & Recovery', 'Heart', 4, true),
-('cognitive', 'Cognitive Enhancement', 'Brain', 5, true);
+('research', 'Growth & Hormones', 'FlaskConical', 1, true),
+('cosmetic', 'Anti-Aging & Skin', 'Sparkles', 2, true),
+('performance', 'Athletic Performance', 'Dumbbell', 3, true),
+('healing', 'Recovery & Repair', 'Heart', 4, true),
+('cognitive', 'Brain & Focus', 'Brain', 5, true);
 
 -- Insert sample peptide products
 INSERT INTO products (name, description, category, base_price, purity_percentage, molecular_weight, cas_number, sequence, featured, available, stock_quantity) VALUES
