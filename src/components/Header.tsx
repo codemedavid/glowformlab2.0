@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
 
   return (
     <>
-      <header className="bg-white shadow-md sticky top-0 z-50 border-b-2 border-blue-100">
+      <header className="bg-white shadow-md sticky top-0 z-50 border-b-2 border-sky-100">
         <div className="container mx-auto px-4 md:px-6 py-3 md:py-4">
           <div className="flex items-center justify-between gap-4">
             {/* Logo and Brand */}
@@ -56,15 +56,21 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
               <nav className="hidden md:flex items-center gap-2 lg:gap-3">
                 <button
                   onClick={onMenuClick}
-                  className="px-3 py-2 lg:px-4 lg:py-2 text-sm lg:text-base text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all font-medium"
+                  className="px-3 py-2 lg:px-4 lg:py-2 text-sm lg:text-base text-gray-700 hover:text-sky-600 hover:bg-sky-50 rounded-xl transition-all font-medium"
                 >
                   Products
                 </button>
                 <a
+                  href="/coa"
+                  className="px-3 py-2 lg:px-4 lg:py-2 text-sm lg:text-base text-gray-700 hover:text-sky-600 hover:bg-sky-50 rounded-xl transition-all font-medium"
+                >
+                  Lab Reports
+                </a>
+                <a
                   href={messengerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 lg:gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 py-2 lg:px-5 lg:py-2.5 rounded-xl transition-all font-medium text-sm lg:text-base shadow-md hover:shadow-lg transform hover:scale-105"
+                  className="flex items-center gap-1.5 lg:gap-2 bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white px-4 py-2 lg:px-5 lg:py-2.5 rounded-xl transition-all font-medium text-sm lg:text-base shadow-md hover:shadow-lg transform hover:scale-105"
                 >
                   <MessageCircle className="w-4 h-4 lg:w-5 lg:h-5" />
                   Messenger
@@ -74,12 +80,12 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
               {/* Cart Button */}
               <button
                 onClick={onCartClick}
-                className="relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base md:text-lg"
+                className="relative bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg text-sm sm:text-base md:text-lg"
               >
                 <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
                 <span className="hidden sm:inline">Cart</span>
                 {cartItemsCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 bg-gradient-to-r from-blue-400 to-blue-500 text-white text-xs md:text-sm font-bold rounded-full w-5 h-5 md:w-7 md:h-7 flex items-center justify-center animate-bounce shadow-lg">
+                  <span className="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 bg-gradient-to-r from-pink-400 to-pink-500 text-white text-xs md:text-sm font-bold rounded-full w-5 h-5 md:w-7 md:h-7 flex items-center justify-center animate-bounce shadow-lg">
                     {cartItemsCount}
                   </span>
                 )}
@@ -116,15 +122,22 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                     onMenuClick();
                     setMobileMenuOpen(false);
                   }}
-                  className="text-left px-4 py-2.5 text-gray-700 hover:bg-blue-50 rounded-xl transition-colors font-medium text-sm border-2 border-transparent hover:border-blue-200"
+                  className="text-left px-4 py-2.5 text-gray-700 hover:bg-sky-50 rounded-xl transition-colors font-medium text-sm border-2 border-transparent hover:border-sky-200"
                 >
                   🧪 Products
                 </button>
                 <a
+                  href="/coa"
+                  className="text-left px-4 py-2.5 text-gray-700 hover:bg-sky-50 rounded-xl transition-colors font-medium text-sm border-2 border-transparent hover:border-sky-200"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  📋 Lab Reports
+                </a>
+                <a
                   href={messengerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all font-medium text-sm shadow-md"
+                  className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-sky-400 to-sky-500 text-white rounded-xl hover:from-sky-500 hover:to-sky-600 transition-all font-medium text-sm shadow-md"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <MessageCircle className="w-4 h-4" />
@@ -136,7 +149,7 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                       onCartClick();
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all font-medium text-sm shadow-md"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-sky-500 to-sky-600 text-white rounded-xl hover:from-sky-600 hover:to-sky-700 transition-all font-medium text-sm shadow-md"
                   >
                     <ShoppingCart className="w-4 h-4" />
                     View Cart ({cartItemsCount})

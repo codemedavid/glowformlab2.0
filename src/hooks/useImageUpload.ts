@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 
-export const useImageUpload = () => {
+export const useImageUpload = (folder: string = 'menu-images') => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
 
@@ -37,9 +37,9 @@ export const useImageUpload = () => {
         });
       }, 100);
 
-      // Upload to Supabase Storage
+      // Upload to Supabase Storage (using dynamic folder/bucket)
       const { data, error } = await supabase.storage
-        .from('menu-images')
+        .from(folder)
         .upload(fileName, file, {
           cacheControl: '3600',
           upsert: false,
@@ -55,7 +55,7 @@ export const useImageUpload = () => {
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('menu-images')
+        .from(folder)
         .getPublicUrl(data.path);
 
       return publicUrl;
@@ -75,7 +75,7 @@ export const useImageUpload = () => {
       const fileName = urlParts[urlParts.length - 1];
 
       const { error } = await supabase.storage
-        .from('menu-images')
+        .from(folder)
         .remove([fileName]);
 
       if (error) {

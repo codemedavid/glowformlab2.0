@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Edit, Trash2, Save, X, ArrowLeft, Beaker, TrendingUp, Package, Users, Lock, FolderOpen, CreditCard, Settings, Sparkles, Heart, Layers } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, ArrowLeft, Beaker, TrendingUp, Package, Users, Lock, FolderOpen, CreditCard, Settings, Sparkles, Heart, Layers, Shield } from 'lucide-react';
 import type { Product } from '../types';
 import { useMenu } from '../hooks/useMenu';
 import { useCategories } from '../hooks/useCategories';
@@ -8,6 +8,7 @@ import CategoryManager from './CategoryManager';
 import PaymentMethodManager from './PaymentMethodManager';
 import SiteSettingsManager from './SiteSettingsManager';
 import VariationManager from './VariationManager';
+import COAManager from './COAManager';
 
 const AdminDashboard: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -17,7 +18,7 @@ const AdminDashboard: React.FC = () => {
   const [loginError, setLoginError] = useState('');
   const { products, loading, addProduct, updateProduct, deleteProduct } = useMenu();
   const { categories } = useCategories();
-  const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'settings'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'settings' | 'coa'>('dashboard');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [managingVariationsFor, setManagingVariationsFor] = useState<Product | null>(null);
@@ -822,6 +823,34 @@ const AdminDashboard: React.FC = () => {
     );
   }
 
+  // COA Lab Reports View
+  if (currentView === 'coa') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-sky-50 via-blue-50 to-cyan-50">
+        <div className="bg-white/90 backdrop-blur-sm shadow-lg border-b-2 border-sky-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setCurrentView('dashboard')}
+                  className="text-sky-600 hover:text-sky-700 transition-colors flex items-center gap-2 group"
+                >
+                  <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
+                  Dashboard
+                </button>
+                <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-sky-500 to-blue-600 bg-clip-text text-transparent">🔬 Lab Reports (COA)</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-4 py-8">
+          <COAManager />
+        </div>
+      </div>
+    );
+  }
+
   // Dashboard View
   return (
     <>
@@ -981,6 +1010,15 @@ const AdminDashboard: React.FC = () => {
                   <CreditCard className="h-3 w-3 md:h-5 md:w-5" />
                 </div>
                 <span className="text-xs md:text-sm font-medium text-gray-900">Payment Methods</span>
+              </button>
+              <button
+                onClick={() => setCurrentView('coa')}
+                className="w-full flex items-center gap-2 md:gap-3 p-2 md:p-3 text-left hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 rounded-lg md:rounded-xl transition-all group"
+              >
+                <div className="p-1.5 md:p-2 bg-gradient-to-br from-sky-400 to-blue-600 rounded-md md:rounded-lg text-white">
+                  <Shield className="h-3 w-3 md:h-5 md:w-5" />
+                </div>
+                <span className="text-xs md:text-sm font-medium text-gray-900">Lab Reports (COA)</span>
               </button>
               <button
                 onClick={() => setCurrentView('settings')}

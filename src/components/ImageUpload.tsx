@@ -1,31 +1,60 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Upload, X, Image as ImageIcon } from 'lucide-react';
-import { useImageUpload } from '../hooks/useImageUpload';
 
 interface ImageUploadProps {
-  currentImage?: string;
+  currentImage?: string | null;
   onImageChange: (imageUrl: string | undefined) => void;
   className?: string;
+  folder?: string;
 }
 
 const ImageUpload: React.FC<ImageUploadProps> = ({ 
   currentImage, 
   onImageChange, 
-  className = '' 
+  className = '',
+  folder = 'menu-images'
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { uploadImage, deleteImage, uploading, uploadProgress } = useImageUpload();
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
-    try {
-      const imageUrl = await uploadImage(file);
-      onImageChange(imageUrl);
-    } catch (error) {
-      alert(error instanceof Error ? error.message : 'Failed to upload image');
+    // Validate file
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      alert('❌ Please upload a valid image file (JPEG, PNG, WebP, or GIF)');
+      return;
     }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      alert('❌ Image size must be less than 5MB');
+      return;
+    }
+
+    // Convert image to base64 - this works without any setup!
+    const reader = new FileReader();
+    reader.onloadstart = () => setUploading(true);
+    reader.onprogress = (e) => {
+      if (e.lengthComputable) {
+        setUploadProgress(Math.round((e.loaded / e.total) * 100));
+      }
+    };
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      onImageChange(base64String);
+      setUploading(false);
+      setUploadProgress(0);
+    };
+    reader.onerror = () => {
+      alert('❌ Failed to read image file');
+      setUploading(false);
+      setUploadProgress(0);
+    };
+    reader.readAsDataURL(file);
 
     // Reset file input
     if (fileInputRef.current) {
@@ -33,17 +62,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     }
   };
 
-  const handleRemoveImage = async () => {
-    if (currentImage) {
-      try {
-        await deleteImage(currentImage);
-        onImageChange(undefined);
-      } catch (error) {
-        console.error('Error removing image:', error);
-        // Still remove from UI even if deletion fails
-        onImageChange(undefined);
-      }
-    }
+  const handleRemoveImage = () => {
+    onImageChange(undefined);
   };
 
   const triggerFileSelect = () => {
@@ -52,54 +72,46 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 
   return (
     <div className={`space-y-4 ${className}`}>
-      <label className="block text-sm font-medium text-black mb-2">Menu Item Image</label>
-      
       {currentImage ? (
-        <div className="relative">
+        <div className="relative group">
           <img
             src={currentImage}
-            alt="Menu item preview"
-            className="w-full h-48 object-cover rounded-lg border border-gray-300 transition-opacity duration-300"
+            alt="Preview"
+            className="w-full max-w-2xl object-contain rounded-2xl border-2 border-sky-200 shadow-lg hover:shadow-xl transition-all"
             loading="lazy"
             decoding="async"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-            }}
-            onLoad={(e) => {
-              e.currentTarget.style.opacity = '1';
-            }}
-            style={{ opacity: 0 }}
           />
           <button
             type="button"
             onClick={handleRemoveImage}
-            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
+            className="absolute top-3 right-3 p-2 bg-red-500 hover:bg-red-600 text-white rounded-full shadow-lg transition-all"
             disabled={uploading}
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         </div>
       ) : (
         <div
           onClick={triggerFileSelect}
-          className="w-full h-48 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
+          className="w-full max-w-2xl border-2 border-dashed border-sky-300 rounded-2xl p-12 flex flex-col items-center justify-center cursor-pointer hover:border-sky-400 hover:bg-sky-50/50 transition-all duration-300 bg-gradient-to-br from-sky-50/30 to-blue-50/30"
         >
           {uploading ? (
             <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-black mx-auto mb-2"></div>
-              <p className="text-sm text-gray-600">Uploading... {uploadProgress}%</p>
-              <div className="w-32 bg-gray-200 rounded-full h-2 mt-2">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-sky-200 border-t-sky-500 mx-auto mb-4"></div>
+              <p className="text-base font-medium text-gray-700 mb-2">Uploading... {uploadProgress}%</p>
+              <div className="w-48 bg-sky-100 rounded-full h-3 mt-3">
                 <div 
-                  className="bg-black h-2 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-sky-400 to-sky-500 h-3 rounded-full transition-all duration-300 shadow-sm"
                   style={{ width: `${uploadProgress}%` }}
                 ></div>
               </div>
             </div>
           ) : (
             <>
-              <ImageIcon className="h-12 w-12 text-gray-400 mb-2" />
-              <p className="text-sm text-gray-600 mb-1">Click to upload image</p>
-              <p className="text-xs text-gray-500">JPEG, PNG, WebP, GIF (max 5MB)</p>
+              <ImageIcon className="h-16 w-16 text-sky-400 mb-4" />
+              <p className="text-lg font-medium text-gray-700 mb-2">Click to upload COA image</p>
+              <p className="text-sm text-gray-500 mb-1">or drag and drop</p>
+              <p className="text-xs text-gray-400">JPEG, PNG, WebP (max 5MB)</p>
             </>
           )}
         </div>
@@ -115,32 +127,39 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
       />
 
       {!currentImage && (
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           <button
             type="button"
             onClick={triggerFileSelect}
             disabled={uploading}
-            className="flex items-center space-x-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white rounded-2xl font-medium shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Upload className="h-4 w-4" />
-            <span>Upload Image</span>
+            <Upload className="h-5 w-5" />
+            <span>Choose File</span>
           </button>
-          <span className="text-sm text-gray-500">or enter URL below</span>
+          <span className="text-sm text-gray-500">or paste URL below</span>
         </div>
       )}
 
-      {/* URL Input as fallback */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Or enter image URL</label>
-        <input
-          type="url"
-          value={currentImage || ''}
-          onChange={(e) => onImageChange(e.target.value || undefined)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent"
-          placeholder="https://example.com/image.jpg"
-          disabled={uploading}
-        />
-      </div>
+      {/* Optional URL Input */}
+      {!currentImage && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Or paste an image URL (optional)
+          </label>
+          <input
+            type="url"
+            value={currentImage || ''}
+            onChange={(e) => onImageChange(e.target.value || undefined)}
+            className="input-field"
+            placeholder="https://i.imgur.com/example.jpg"
+            disabled={uploading}
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            If you have the image already hosted online
+          </p>
+        </div>
+      )}
     </div>
   );
 };

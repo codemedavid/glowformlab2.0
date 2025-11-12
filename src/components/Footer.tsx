@@ -30,16 +30,25 @@ const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Facebook Messenger Button */}
-          <a
-            href={messengerUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white px-5 py-2.5 md:px-6 md:py-3 rounded-xl transition-all font-medium text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
-            Chat on Messenger
-          </a>
+          {/* Quick Links */}
+          <div className="flex flex-wrap items-center gap-3 justify-center md:justify-start">
+            <a
+              href="/coa"
+              className="flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-4 py-2 md:px-5 md:py-2.5 rounded-xl transition-all font-medium text-xs md:text-sm border border-white/30"
+            >
+              <Shield className="w-4 h-4" />
+              Lab Reports
+            </a>
+            <a
+              href={messengerUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-gradient-to-r from-sky-400 to-sky-500 hover:from-sky-500 hover:to-sky-600 text-white px-5 py-2.5 md:px-6 md:py-3 rounded-xl transition-all font-medium text-sm md:text-base shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              <MessageCircle className="w-4 h-4 md:w-5 md:h-5" />
+              Chat on Messenger
+            </a>
+          </div>
 
         </div>
       </div>
