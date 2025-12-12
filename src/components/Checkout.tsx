@@ -215,8 +215,9 @@ Please confirm this order. Thank you!
       }
 
       // Open contact method based on selection
+      // Using m.me link with Page ID to open Messenger directly
       const contactUrl = contactMethod === 'messenger'
-        ? 'https://www.facebook.com/people/SlimDose-Peptides/61555961135365/?mibextid=wwXIfr&rdid=2S96bsu8LM9aSsNA&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F17WHrmHvJc%2F%3Fmibextid%3DwwXIfr'
+        ? 'https://m.me/61555961135365'
         : null;
 
       if (contactUrl) {
@@ -272,7 +273,7 @@ Please confirm this order. Thank you!
 
   const handleOpenContact = () => {
     const contactUrl = contactMethod === 'messenger'
-      ? 'https://www.facebook.com/people/SlimDose-Peptides/61555961135365/?mibextid=wwXIfr&rdid=2S96bsu8LM9aSsNA&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F17WHrmHvJc%2F%3Fmibextid%3DwwXIfr'
+      ? 'https://m.me/61555961135365'
       : null;
 
     if (contactUrl) {
