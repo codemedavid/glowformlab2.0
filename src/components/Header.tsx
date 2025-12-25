@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useCOAPageSetting } from '../hooks/useCOAPageSetting';
-import { ShoppingCart, Menu, X, MessageCircle, Calculator, FileText, HelpCircle, Truck } from 'lucide-react';
+import { ShoppingCart, Menu, X, MessageCircle, Calculator, FileText, HelpCircle, Truck, ClipboardCheck } from 'lucide-react';
 
 interface HeaderProps {
   cartItemsCount: number;
@@ -84,7 +84,14 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   FAQ
                 </a>
                 <a
-                  href="https://t.me/+kdn_GOqZXxI1Y2Jl"
+                  href="/assessment"
+                  className="text-sm font-medium text-gray-600 hover:text-theme-accent transition-colors flex items-center gap-1"
+                >
+                  <ClipboardCheck className="w-4 h-4" />
+                  Assessment
+                </a>
+                <a
+                  href="https://t.me/+k3SfL4WjnMQ3NGRl"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm font-medium text-gray-600 hover:text-[#0088cc] transition-colors flex items-center gap-1"
@@ -203,7 +210,16 @@ const Header: React.FC<HeaderProps> = ({ cartItemsCount, onCartClick, onMenuClic
                   FAQ
                 </a>
                 <a
-                  href="https://t.me/+kdn_GOqZXxI1Y2Jl"
+                  href="/assessment"
+                  className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"
+                >
+                  <div className="p-2 rounded-lg bg-navy-50 group-hover:bg-white group-hover:shadow-sm border border-transparent group-hover:border-navy-600 transition-all">
+                    <ClipboardCheck className="w-5 h-5 text-gold-500" />
+                  </div>
+                  Assessment
+                </a>
+                <a
+                  href="https://t.me/+k3SfL4WjnMQ3NGRl"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 p-3 rounded-xl text-left font-medium text-base text-navy-900 hover:bg-navy-50 hover:text-navy-900 transition-all group"

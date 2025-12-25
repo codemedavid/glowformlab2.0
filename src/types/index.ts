@@ -126,3 +126,25 @@ export interface PromoCode {
   active: boolean;
   created_at: string;
 }
+
+// Assessment Types
+export interface AssessmentResponse {
+  id?: string;
+  full_name: string;
+  email: string;
+  age_range: string;
+  location: string;
+  goals: string[];
+  medical_history: string[];
+  experience_level: string;
+  preferences: {
+    frequency?: string;
+    [key: string]: any;
+  };
+  consent_agreed: boolean;
+  status: string;
+  recommendation_generated?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+

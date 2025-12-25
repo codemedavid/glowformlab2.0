@@ -317,20 +317,31 @@ export function useMenu() {
 
   const addVariation = async (variation: Omit<ProductVariation, 'id' | 'created_at'>) => {
     try {
+      console.log('📤 Adding variation to database:', variation);
+
       const { data, error } = await supabase
         .from('product_variations')
         .insert([variation])
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Supabase insert error:', error);
+        console.error('❌ Error details:', JSON.stringify(error, null, 2));
+        console.error('❌ Error code:', error.code);
+        console.error('❌ Error message:', error.message);
+        console.error('❌ Error hint:', error.hint);
+        throw new Error(error.message || 'Database error');
+      }
 
+      console.log('✅ Variation added successfully:', data);
       // Refresh products to include new variation
       await fetchProducts();
       return { success: true, data };
     } catch (err) {
-      console.error('Error adding variation:', err);
-      return { success: false, error: err instanceof Error ? err.message : 'Failed to add variation' };
+      console.error('❌ Error adding variation:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Failed to add variation';
+      return { success: false, error: errorMessage };
     }
   };
 

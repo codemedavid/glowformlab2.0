@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageCircle, Shield, Heart, HelpCircle, Calculator, FileText, Truck } from 'lucide-react';
+import { MessageCircle, Shield, Heart, HelpCircle, Calculator, FileText, Truck, ClipboardCheck } from 'lucide-react';
 import { useCOAPageSetting } from '../hooks/useCOAPageSetting';
 
 const Footer: React.FC = () => {
@@ -79,7 +79,14 @@ const Footer: React.FC = () => {
               FAQ
             </a>
             <a
-              href="https://t.me/+kdn_GOqZXxI1Y2Jl"
+              href="/assessment"
+              className="text-gray-500 hover:text-theme-accent transition-colors flex items-center gap-2 text-sm font-medium"
+            >
+              <ClipboardCheck className="w-4 h-4" />
+              Assessment
+            </a>
+            <a
+              href="https://t.me/+k3SfL4WjnMQ3NGRl"
               target="_blank"
               rel="noopener noreferrer"
               className="text-gray-500 hover:text-[#0088cc] transition-colors flex items-center gap-2 text-sm font-medium"

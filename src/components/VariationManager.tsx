@@ -40,7 +40,7 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
 
     try {
       setIsProcessing(true);
-      const result = await addVariation({
+      const variationData = {
         product_id: product.id,
         name: newVariation.name,
         quantity_mg: newVariation.quantity_mg,
@@ -48,7 +48,10 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
         discount_price: newVariation.discount_price,
         discount_active: newVariation.discount_active,
         stock_quantity: newVariation.stock_quantity
-      });
+      };
+
+      console.log('📤 Submitting variation:', variationData);
+      const result = await addVariation(variationData);
 
       if (result.success) {
         setNewVariation({
@@ -62,10 +65,12 @@ const VariationManager: React.FC<VariationManagerProps> = ({ product, onClose })
         setIsAdding(false);
         alert('Variation added successfully!');
       } else {
-        alert(result.error || 'Failed to add variation');
+        console.error('Failed to add variation:', result.error);
+        alert(`Failed to add variation: ${result.error || 'Unknown error'}`);
       }
     } catch (error) {
-      alert('Failed to add variation');
+      console.error('Exception adding variation:', error);
+      alert(`Failed to add variation: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsProcessing(false);
     }
