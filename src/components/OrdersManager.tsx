@@ -40,6 +40,7 @@ interface Order {
   updated_at: string;
   tracking_number: string | null;
   shipping_note: string | null;
+  courier: string | null;
 }
 
 interface OrdersManagerProps {
@@ -219,7 +220,7 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
     }
   };
 
-  const handleSaveTracking = async (orderId: string, trackingNumber: string, shippingNote: string) => {
+  const handleSaveTracking = async (orderId: string, trackingNumber: string, shippingNote: string, courier: string) => {
     try {
       setIsProcessing(true);
       const { error } = await supabase
@@ -227,6 +228,7 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
         .update({
           tracking_number: trackingNumber || null,
           shipping_note: shippingNote || null,
+          courier: courier || null,
           updated_at: new Date().toISOString()
         })
         .eq('id', orderId);
@@ -236,7 +238,7 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
       // Update local state
       const updatedOrders = orders.map(o =>
         o.id === orderId
-          ? { ...o, tracking_number: trackingNumber || null, shipping_note: shippingNote || null }
+          ? { ...o, tracking_number: trackingNumber || null, shipping_note: shippingNote || null, courier: courier || null }
           : o
       );
       setOrders(updatedOrders);
@@ -245,7 +247,8 @@ const OrdersManager: React.FC<OrdersManagerProps> = ({ onBack }) => {
         setSelectedOrder({
           ...selectedOrder,
           tracking_number: trackingNumber || null,
-          shipping_note: shippingNote || null
+          shipping_note: shippingNote || null,
+          courier: courier || null
         });
       }
 
@@ -550,7 +553,7 @@ interface OrderDetailsViewProps {
   onBack: () => void;
   onConfirm: () => void;
   onUpdateStatus: (orderId: string, status: string) => void;
-  onSaveTracking: (orderId: string, trackingNumber: string, shippingNote: string) => void;
+  onSaveTracking: (orderId: string, trackingNumber: string, shippingNote: string, courier: string) => void;
   isProcessing: boolean;
 }
 
@@ -564,11 +567,13 @@ const OrderDetailsView: React.FC<OrderDetailsViewProps> = ({
 }) => {
   const [trackingNumber, setTrackingNumber] = useState(order.tracking_number || '');
   const [shippingNote, setShippingNote] = useState(order.shipping_note || '');
+  const [courier, setCourier] = useState(order.courier || 'jnt');
 
   // Update local state when order changes
   useEffect(() => {
     setTrackingNumber(order.tracking_number || '');
     setShippingNote(order.shipping_note || '');
+    setCourier(order.courier || 'jnt');
   }, [order]);
   const totalItems = order.order_items.reduce((sum, item) => sum + item.quantity, 0);
   const finalTotal = order.total_price + (order.shipping_fee || 0);
@@ -661,21 +666,38 @@ const OrderDetailsView: React.FC<OrderDetailsViewProps> = ({
               Shipping & Tracking Details
             </h3>
             <div className="grid grid-cols-1 gap-4">
+              {/* Courier Selection */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  J&T Tracking Number
+                  Courier
+                </label>
+                <select
+                  value={courier}
+                  onChange={(e) => setCourier(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none bg-white"
+                >
+                  <option value="jnt">J&T Express</option>
+                  <option value="lbc">LBC Express</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Tracking Number ({courier === 'lbc' ? 'LBC' : 'J&T'})
                 </label>
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={trackingNumber}
                     onChange={(e) => setTrackingNumber(e.target.value)}
-                    placeholder="e.g., 78XXXX..."
+                    placeholder={courier === 'lbc' ? 'e.g., 12345678901234' : 'e.g., 78XXXX...'}
                     className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                   />
                   {trackingNumber && (
                     <a
-                      href={`https://www.jtexpress.ph/trajectoryQuery?bills=${trackingNumber}`}
+                      href={courier === 'lbc'
+                        ? `https://www.lbcexpress.com/track/?tracking_no=${trackingNumber}`
+                        : `https://www.jtexpress.ph/trajectoryQuery?bills=${trackingNumber}`
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
                       className="px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 flex items-center justify-center"
@@ -694,12 +716,12 @@ const OrderDetailsView: React.FC<OrderDetailsViewProps> = ({
                   type="text"
                   value={shippingNote}
                   onChange={(e) => setShippingNote(e.target.value)}
-                  placeholder="e.g., Shipped via J&T Express..."
+                  placeholder={`e.g., Shipped via ${courier === 'lbc' ? 'LBC' : 'J&T'} Express...`}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
                 />
               </div>
               <button
-                onClick={() => onSaveTracking(order.id, trackingNumber, shippingNote)}
+                onClick={() => onSaveTracking(order.id, trackingNumber, shippingNote, courier)}
                 disabled={isProcessing}
                 className="self-end px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-colors shadow-sm disabled:opacity-50"
               >

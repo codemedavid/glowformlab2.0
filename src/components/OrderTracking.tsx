@@ -8,6 +8,7 @@ interface TrackingOrder {
     payment_status: string;
     tracking_number: string | null;
     shipping_note: string | null;
+    courier: string | null;
     total_price: number;
     shipping_fee: number;
     order_items: {
@@ -209,19 +210,33 @@ const OrderTracking: React.FC = () => {
                                         {order.tracking_number ? (
                                             <div className="space-y-4">
                                                 <div>
-                                                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">Tracking Number (J&T)</p>
+                                                    <p className="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">
+                                                        Tracking Number ({order.courier === 'lbc' ? 'LBC' : 'J&T'})
+                                                    </p>
                                                     <p className="text-xl font-mono font-bold text-navy-900 tracking-wide">{order.tracking_number}</p>
                                                 </div>
 
-                                                <a
-                                                    href={`https://www.jtexpress.ph/trajectoryQuery?bills=${order.tracking_number}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="block w-full py-3 bg-blue-600 hover:bg-blue-700 text-white text-center rounded-lg font-bold transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                                                >
-                                                    Track on J&T Express
-                                                    <ExternalLink className="w-4 h-4" />
-                                                </a>
+                                                {order.courier === 'lbc' ? (
+                                                    <a
+                                                        href={`https://www.lbcexpress.com/track/?tracking_no=${order.tracking_number}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="block w-full py-3 bg-red-600 hover:bg-red-700 text-white text-center rounded-lg font-bold transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                                                    >
+                                                        Track on LBC Express
+                                                        <ExternalLink className="w-4 h-4" />
+                                                    </a>
+                                                ) : (
+                                                    <a
+                                                        href={`https://www.jtexpress.ph/trajectoryQuery?bills=${order.tracking_number}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="block w-full py-3 bg-blue-600 hover:bg-blue-700 text-white text-center rounded-lg font-bold transition-colors shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                                                    >
+                                                        Track on J&T Express
+                                                        <ExternalLink className="w-4 h-4" />
+                                                    </a>
+                                                )}
                                             </div>
                                         ) : (
                                             <div className="text-center py-4 text-gray-500">
