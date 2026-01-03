@@ -111,7 +111,7 @@ export function useMenu() {
       const timestamp = Date.now();
       const { data, error } = await supabase
         .from('products')
-        .select('id, name, description, category, base_price, discount_price, discount_start_date, discount_end_date, discount_active, purity_percentage, molecular_weight, cas_number, sequence, storage_conditions, inclusions, stock_quantity, available, featured, image_url, safety_sheet_url, created_at, updated_at')
+        .select('id, name, description, category, base_price, discount_price, discount_start_date, discount_end_date, discount_active, purity_percentage, molecular_weight, cas_number, sequence, storage_conditions, stock_quantity, available, featured, image_url, safety_sheet_url, created_at, updated_at')
         .eq('available', true)
         .order('featured', { ascending: false })
         .order('name', { ascending: true });
@@ -164,6 +164,7 @@ export function useMenu() {
 
           return {
             ...product,
+            inclusions: (product as any).inclusions || null, // Default to null if column doesn't exist
             variations: variations || []
           };
         })
