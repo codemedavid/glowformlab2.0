@@ -333,14 +333,14 @@ export function useMenu() {
 
       const { error: rulesError1 } = await supabase
         .from('recommendation_rules')
-        .delete({ count: 'exact' })
+        .delete()
         .eq('product_id', id);
 
       if (rulesError1) console.warn('Warning cleanup rules (product_id):', rulesError1);
 
       const { error: rulesError2 } = await supabase
         .from('recommendation_rules')
-        .delete({ count: 'exact' })
+        .delete()
         .eq('recommended_product_id', id);
 
       if (rulesError2) console.warn('Warning cleanup rules (recommended_product_id):', rulesError2);
