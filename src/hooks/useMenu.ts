@@ -316,6 +316,25 @@ export function useMenu() {
     }
   };
 
+  const deleteProducts = async (ids: string[]) => {
+    try {
+      console.log(`🗑️ Batch deleting ${ids.length} products...`);
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .in('id', ids);
+
+      if (error) throw error;
+
+      console.log('✅ Batch delete successful');
+      setProducts(products.filter(p => !ids.includes(p.id)));
+      return { success: true };
+    } catch (err) {
+      console.error('❌ Error deleting products batch:', err);
+      return { success: false, error: err instanceof Error ? err.message : 'Failed to delete products' };
+    }
+  };
+
   const addVariation = async (variation: Omit<ProductVariation, 'id' | 'created_at'>) => {
     try {
       console.log('📤 Adding variation to database:', variation);
@@ -393,6 +412,7 @@ export function useMenu() {
     addProduct,
     updateProduct,
     deleteProduct,
+    deleteProducts,
     addVariation,
     updateVariation,
     deleteVariation

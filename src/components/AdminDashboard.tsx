@@ -22,7 +22,7 @@ const AdminDashboard: React.FC = () => {
   });
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-  const { products, loading, addProduct, updateProduct, deleteProduct, refreshProducts } = useMenu();
+  const { products, loading, addProduct, updateProduct, deleteProduct, deleteProducts, refreshProducts } = useMenu();
   const { categories } = useCategories();
   const [currentView, setCurrentView] = useState<'dashboard' | 'products' | 'add' | 'edit' | 'categories' | 'payments' | 'inventory' | 'orders' | 'shipping' | 'coa' | 'faq' | 'settings' | 'promo-codes'>('dashboard');
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -118,26 +118,17 @@ const AdminDashboard: React.FC = () => {
     if (confirm(`Are you sure you want to delete ${selectedProducts.size} product(s)? This action cannot be undone.`)) {
       try {
         setIsProcessing(true);
-        let successCount = 0;
-        let failedCount = 0;
+        const productsToDelete = Array.from(selectedProducts);
 
-        for (const productId of selectedProducts) {
-          const result = await deleteProduct(productId);
-          if (result.success) {
-            successCount++;
-          } else {
-            failedCount++;
-          }
-        }
+        const result = await deleteProducts(productsToDelete);
 
-        if (failedCount > 0) {
-          alert(`Deleted ${successCount} product(s). ${failedCount} failed.`);
+        if (result.success) {
+          alert(`Successfully deleted ${selectedProducts.size} product(s)`);
+          setSelectedProducts(new Set());
+          setManagingVariationsProductId(null);
         } else {
-          alert(`Successfully deleted ${successCount} product(s)`);
+          alert(result.error || 'Failed to delete products');
         }
-
-        setSelectedProducts(new Set());
-        setManagingVariationsProductId(null);
       } catch (error) {
         alert('Failed to delete products. Please try again.');
       } finally {

@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
     type TEXT NOT NULL DEFAULT 'text',
     description TEXT,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+); 
 
 -- Disable RLS
 ALTER TABLE public.site_settings DISABLE ROW LEVEL SECURITY;
