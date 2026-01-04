@@ -7,7 +7,7 @@ export const useCOAPageSetting = () => {
 
   useEffect(() => {
     fetchCOAPageSetting();
-    
+
     // Subscribe to changes in site_settings
     const channel = supabase
       .channel('coa-page-setting-changes')
@@ -38,7 +38,7 @@ export const useCOAPageSetting = () => {
         .from('site_settings')
         .select('value')
         .eq('id', 'coa_page_enabled')
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
         console.error('Error fetching COA page setting:', error);
@@ -46,7 +46,7 @@ export const useCOAPageSetting = () => {
         setCoaPageEnabled(true);
         return;
       }
-      
+
       // Default to enabled if setting doesn't exist
       setCoaPageEnabled(data?.value === 'true' || data?.value === true || !data);
     } catch (error) {

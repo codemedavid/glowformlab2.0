@@ -53,7 +53,7 @@ const COAManager: React.FC<COAManagerProps> = ({ onBack }) => {
         .from('site_settings')
         .select('value')
         .eq('id', 'coa_page_enabled')
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
       setCoaPageEnabled(data?.value === 'true' || data?.value === true || !data);
@@ -71,7 +71,7 @@ const COAManager: React.FC<COAManagerProps> = ({ onBack }) => {
         .from('site_settings')
         .select('id')
         .eq('id', 'coa_page_enabled')
-        .single();
+        .maybeSingle();
 
       let error;
 
