@@ -37,7 +37,7 @@ const FAQ: React.FC = () => {
         ? faqs.filter(faq => faq.category === activeCategory)
         : faqs;
 
-    const facebookUrl = `https://www.facebook.com/glowformlab`;
+    const whatsappUrl = `https://wa.me/639564457969`;
 
     if (loading) {
         return (
@@ -148,16 +148,16 @@ const FAQ: React.FC = () => {
                         Still have questions?
                     </h3>
                     <p className="text-gray-600 mb-6">
-                        We're here to help! Reach out to us on Facebook for quick assistance.
+                        We're here to help! Reach out to us on WhatsApp for quick assistance.
                     </p>
                     <a
-                        href={facebookUrl}
+                        href={whatsappUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-2 bg-navy-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-navy-800 transition-colors shadow-md hover:shadow-lg"
                     >
                         <MessageCircle className="w-5 h-5 text-gold-400" />
-                        Message us on Facebook
+                        Message us on WhatsApp
                     </a>
                 </div>
             </div>
