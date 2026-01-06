@@ -59,6 +59,8 @@ const AdminDashboard: React.FC = () => {
     discount_active: false,
     inclusions: null
   });
+  // Separate state for textarea to prevent cursor jumping/re-render issues
+  const [inclusionsText, setInclusionsText] = useState('');
 
   const handleAddProduct = () => {
     setCurrentView('add');
@@ -82,11 +84,13 @@ const AdminDashboard: React.FC = () => {
       discount_active: false,
       inclusions: null
     });
+    setInclusionsText('');
   };
 
   const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
     setFormData(product);
+    setInclusionsText(product.inclusions ? product.inclusions.join('\n') : '');
     setCurrentView('edit');
     setSelectedProducts(new Set());
     setManagingVariationsProductId(null);
@@ -177,6 +181,21 @@ const AdminDashboard: React.FC = () => {
         if (prepared.cas_number === undefined) prepared.cas_number = null;
         if (prepared.sequence === undefined) prepared.sequence = null;
         if (prepared.inclusions === undefined) prepared.inclusions = null;
+
+        // IMPORTANT: Use the dedicated inclusionsText state as the source of truth
+        // (formData.inclusions is not synced during typing to avoid cursor issues)
+        if (inclusionsText && inclusionsText.trim() !== '') {
+          prepared.inclusions = inclusionsText
+            .split('\n')
+            .map((item: string) => item.trim())
+            .filter((item: string) => item !== '');
+          if (prepared.inclusions.length === 0) prepared.inclusions = null;
+        } else {
+          // Check if the SET checkbox was unchecked (formData.inclusions is null)
+          if (formData.inclusions === null) {
+            prepared.inclusions = null;
+          }
+        }
         return prepared;
       };
 
@@ -423,7 +442,7 @@ const AdminDashboard: React.FC = () => {
       <>
         {variationManagerModal}
         <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-white">
-          <div className="bg-white shadow-md border-b border-gray-200">
+          <div className="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50">
             <div className="max-w-6xl mx-auto px-3 sm:px-4">
               <div className="flex items-center justify-between h-12 md:h-14 gap-2">
                 <div className="flex items-center space-x-2">
@@ -600,7 +619,9 @@ const AdminDashboard: React.FC = () => {
                         if (!e.target.checked) {
                           setFormData({ ...formData, inclusions: null });
                         } else {
-                          setFormData({ ...formData, inclusions: formData.inclusions || [] });
+                          const initialItems = formData.inclusions || [];
+                          setFormData({ ...formData, inclusions: initialItems });
+                          setInclusionsText(initialItems.join('\n'));
                         }
                       }}
                       className="w-4 h-4 text-theme-accent rounded focus:ring-theme-accent"
@@ -614,10 +635,12 @@ const AdminDashboard: React.FC = () => {
                       What's included in this set? (One item per line)
                     </label>
                     <textarea
-                      value={formData.inclusions?.join('\n') || ''}
+                      value={inclusionsText}
                       onChange={(e) => {
-                        const items = e.target.value.split('\n').filter(item => item.trim() !== '');
-                        setFormData({ ...formData, inclusions: items.length > 0 ? items : null });
+                        const newText = e.target.value;
+                        setInclusionsText(newText);
+                        // Decoupled: Don't sync to formData on every keystroke
+                        // We will parse this text on Save
                       }}
                       className="input-field text-sm min-h-[80px]"
                       placeholder="Example:&#10;Syringe for Reconstitution&#10;6 Insulin Syringes (7pcs for 30mg)&#10;10pcs Alcohol Pads&#10;Tirzepatide Printed Guide&#10;Transparent vial case and vial cap&#10;Peptide Injection and Inventory Spreadsheet tracker"
@@ -747,6 +770,18 @@ const AdminDashboard: React.FC = () => {
                     });
                   }}
                 />
+              </div>
+
+              {/* Bottom Save Button */}
+              <div className="pt-4 border-t border-gray-100 flex justify-end">
+                <button
+                  onClick={handleSaveProduct}
+                  disabled={isProcessing}
+                  className="bg-theme-accent hover:bg-theme-accent/90 text-white px-6 py-3 rounded-lg transition-all flex items-center gap-2 shadow-md hover:shadow-lg disabled:opacity-50 font-bold"
+                >
+                  <Save className="h-5 w-5" />
+                  {isProcessing ? 'Saving Changes...' : 'Save Product Changes'}
+                </button>
               </div>
 
             </div>

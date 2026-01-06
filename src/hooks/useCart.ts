@@ -70,7 +70,19 @@ export function useCart() {
       return;
     }
 
-    const price = variation ? variation.price : (product.discount_active && product.discount_price ? product.discount_price : product.base_price);
+    // Calculate price - check for discounts on both variations AND products
+    let price: number;
+    if (variation) {
+      // Variation selected - check if variation has active discount
+      price = (variation.discount_active && variation.discount_price)
+        ? variation.discount_price
+        : variation.price;
+    } else {
+      // No variation - check product discount
+      price = (product.discount_active && product.discount_price)
+        ? product.discount_price
+        : product.base_price;
+    }
 
     const existingItemIndex = cartItems.findIndex(
       item => item.product.id === product.id &&

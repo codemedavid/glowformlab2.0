@@ -172,12 +172,42 @@ const Cart: React.FC<CartProps> = ({
                       </div>
 
                       <div className="text-right">
-                        <div className="text-xl md:text-2xl font-bold text-black">
-                          ₱{(item.price * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
-                        </div>
-                        <div className="text-[10px] md:text-xs text-gray-500">
-                          ₱{item.price.toLocaleString('en-PH', { minimumFractionDigits: 0 })} each
-                        </div>
+                        {/* Check if this is a discounted item */}
+                        {(() => {
+                          const hasDiscount = item.variation
+                            ? (item.variation.discount_active && item.variation.discount_price)
+                            : (item.product.discount_active && item.product.discount_price);
+                          const originalPrice = item.variation
+                            ? item.variation.price
+                            : item.product.base_price;
+                          const savings = originalPrice - item.price;
+
+                          if (hasDiscount && savings > 0) {
+                            return (
+                              <>
+                                <div className="text-xl md:text-2xl font-bold text-green-600">
+                                  ₱{(item.price * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+                                </div>
+                                <div className="text-xs text-gray-400 line-through">
+                                  ₱{(originalPrice * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+                                </div>
+                                <div className="text-[10px] md:text-xs text-green-600 font-medium">
+                                  You save ₱{(savings * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}!
+                                </div>
+                              </>
+                            );
+                          }
+                          return (
+                            <>
+                              <div className="text-xl md:text-2xl font-bold text-black">
+                                ₱{(item.price * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 0 })}
+                              </div>
+                              <div className="text-[10px] md:text-xs text-gray-500">
+                                ₱{item.price.toLocaleString('en-PH', { minimumFractionDigits: 0 })} each
+                              </div>
+                            </>
+                          );
+                        })()}
                       </div>
                     </div>
                   </div>
@@ -205,14 +235,14 @@ const Cart: React.FC<CartProps> = ({
                     <span className="text-gray-700 font-medium">Calculated at checkout</span>
                   </div>
                   <div className="mt-2 space-y-1 text-gray-600">
-                    <p className="font-semibold text-theme-text">J&T Shipping Rates:</p>
+                    <p className="font-semibold text-theme-text">J&T / LBC Shipping Rates:</p>
                     <ul className="list-disc pl-4 space-y-0.5">
-                      <li>Luzon: ₱150</li>
-                      <li>Visayas: ₱120</li>
-                      <li>Mindanao: ₱90</li>
+                      <li>NCR (Metro Manila): ₱100</li>
+                      <li>Luzon (Outside NCR): ₱150</li>
+                      <li>Visayas / Mindanao: ₱200</li>
                     </ul>
-                    <p className="font-semibold text-theme-text mt-2">Maxim Delivery:</p>
-                    <p className="pl-4">₱0 (Booking fee paid by customer upon delivery)</p>
+                    <p className="font-semibold text-theme-text mt-2">Lalamove Delivery:</p>
+                    <p className="pl-4">₱0 (Booking fee paid by customer upon delivery, wait for go signal before booking)</p>
                   </div>
                 </div>
 
