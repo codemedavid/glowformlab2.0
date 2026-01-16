@@ -11,7 +11,7 @@ export interface Category {
   updated_at: string;
 }
 
-export const useCategories = () => {
+export const useCategories = ({ includeInactive = false }: { includeInactive?: boolean } = {}) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,12 +19,16 @@ export const useCategories = () => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      
-      const { data, error: fetchError } = await supabase
+
+      let query = supabase
         .from('categories')
-        .select('*')
-        .eq('active', true)
-        .order('sort_order', { ascending: true });
+        .select('*');
+
+      if (!includeInactive) {
+        query = query.eq('active', true);
+      }
+
+      const { data, error: fetchError } = await query.order('sort_order', { ascending: true });
 
       if (fetchError) throw fetchError;
 
@@ -165,7 +169,7 @@ export const useCategories = () => {
       supabase.removeChannel(categoriesChannel);
       window.removeEventListener('focus', handleFocus);
     };
-  }, []);
+  }, [includeInactive]);
 
   return {
     categories,

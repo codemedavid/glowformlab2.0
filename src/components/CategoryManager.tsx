@@ -8,7 +8,7 @@ interface CategoryManagerProps {
 }
 
 const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
-  const { categories, addCategory, updateCategory, deleteCategory, reorderCategories } = useCategories();
+  const { categories, addCategory, updateCategory, deleteCategory, reorderCategories } = useCategories({ includeInactive: true });
   const [currentView, setCurrentView] = useState<'list' | 'add' | 'edit'>('list');
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [categoryProductCounts, setCategoryProductCounts] = useState<Record<string, number>>({});
@@ -368,8 +368,8 @@ const CategoryManager: React.FC<CategoryManagerProps> = ({ onBack }) => {
 
                     <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-2 flex-shrink-0 sm:border-l sm:border-gray-200 sm:pl-3 sm:ml-1">
                       <span className={`px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-[10px] sm:text-xs font-semibold transition-colors whitespace-nowrap ${category.active
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                          : 'bg-red-50 text-red-700 border border-red-200'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                        : 'bg-red-50 text-red-700 border border-red-200'
                         }`}>
                         {category.active ? 'Active' : 'Inactive'}
                       </span>
