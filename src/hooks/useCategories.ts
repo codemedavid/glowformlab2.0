@@ -42,14 +42,13 @@ export const useCategories = ({ includeInactive = false }: { includeInactive?: b
     }
   };
 
-  const addCategory = async (category: Omit<Category, 'created_at' | 'updated_at'>) => {
+  const addCategory = async (category: Omit<Category, 'id' | 'created_at' | 'updated_at'>) => {
     try {
       const { data, error: insertError } = await supabase
         .from('categories')
         .insert({
-          id: category.id,
           name: category.name,
-          icon: category.icon,
+          icon: category.icon || '',
           sort_order: category.sort_order,
           active: category.active
         })
