@@ -235,14 +235,16 @@ const Cart: React.FC<CartProps> = ({
                     <span className="text-gray-700 font-medium">Calculated at checkout</span>
                   </div>
                   <div className="mt-2 space-y-1 text-gray-600">
-                    <p className="font-semibold text-theme-text">J&T / LBC Shipping Rates:</p>
+                    <p className="font-semibold text-green-700">FREE Shipping via J&T:</p>
+                    <p className="pl-4">NCR, Luzon, Visayas, and Mindanao — free shipping via J&T.</p>
+                    <p className="font-semibold text-theme-text mt-2">LBC Shipping Rates:</p>
                     <ul className="list-disc pl-4 space-y-0.5">
                       <li>NCR (Metro Manila): ₱100</li>
                       <li>Luzon (Outside NCR): ₱150</li>
                       <li>Visayas / Mindanao: ₱200</li>
                     </ul>
                     <p className="font-semibold text-theme-text mt-2">Lalamove Delivery:</p>
-                    <p className="pl-4">₱0 (Booking fee paid by customer upon delivery, wait for go signal before booking)</p>
+                    <p className="pl-4">Customer shoulders the shipping fee (paid upon delivery, wait for go signal before booking).</p>
                   </div>
                 </div>
 
